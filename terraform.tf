@@ -6,5 +6,5 @@ terraform {
 }
 
 module "common" {
-  source = "terraform_modules/common"
+  source = "./terraform_modules/common"
 }
