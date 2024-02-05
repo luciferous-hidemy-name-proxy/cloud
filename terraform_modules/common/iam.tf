@@ -39,7 +39,7 @@ resource "aws_iam_role" "pipe_for_check" {
 
 resource "aws_iam_role_policy_attachment" "pipe_for_process" {
   for_each = toset([
-    "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess",
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole",
     "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
   ])
   policy_arn = each.value
