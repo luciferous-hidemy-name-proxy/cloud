@@ -9,11 +9,6 @@ resource "aws_dynamodb_table" "temp_store" {
     type = "S"
   }
 
-  attribute {
-    name = "ttl"
-    type = "N"
-  }
-
   name             = "temp_store"
   billing_mode     = "PAY_PER_REQUEST"
   stream_enabled   = true
