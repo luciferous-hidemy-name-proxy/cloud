@@ -4,7 +4,7 @@ resource "aws_pipes_pipe" "for_check" {
   role_arn = aws_iam_role.pipe_for_check.arn
 
   source_parameters {
-    dynamodb_stream_parameters  {
+    dynamodb_stream_parameters {
       starting_position = "TRIM_HORIZON"
     }
   }

@@ -18,6 +18,7 @@ resource "aws_dynamodb_table" "temp_store" {
   range_key = "host"
 
   ttl {
+    enabled        = true
     attribute_name = "ttl"
   }
 }
