@@ -1,7 +1,18 @@
 SHELL = /usr/bin/env bash -xeuo pipefail
 
 format: \
+	fmt-python \
 	fmt-terraform
+
+fmt-python: \
+	fmt-python-isort \
+	fmt-python-black
+
+fmt-python-isort:
+	poetry run isort --profile black src/
+
+fmt-python-black:
+	poetry run black src/
 
 fmt-terraform: \
 	fmt-terraform-root \
@@ -21,6 +32,9 @@ fmt-terraform-lambda-function-basic:
 
 .PHONY: \
 	format \
+	fmt-python \
+	fmt-python-isort \
+	fmt-python-black \
 	fmt-terraform \
 	fmt-terraform-root \
 	fmt-terraform-common \
