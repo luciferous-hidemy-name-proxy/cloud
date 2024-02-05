@@ -1,7 +1,7 @@
 data "archive_file" "common_layer" {
   type        = "zip"
   output_path = "layer_common.zip"
-  source_dir  = "${path.root}/src/common"
+  source_dir  = "${path.root}/src/layers/common"
 }
 
 resource "aws_lambda_layer_version" "common" {
