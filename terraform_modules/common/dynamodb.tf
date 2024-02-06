@@ -12,7 +12,7 @@ resource "aws_dynamodb_table" "temp_store" {
   name             = "temp_store"
   billing_mode     = "PAY_PER_REQUEST"
   stream_enabled   = true
-  stream_view_type = "NEW_IMAGE"
+  stream_view_type = "KEYS_ONLY"
 
   hash_key  = "uuid"
   range_key = "host"
