@@ -5,6 +5,9 @@ on:
     branches-ignore:
       - master
 
+env:
+  TF_VAR_CODE_HYDEMY_NAME_PROXY: ${{ secrets.CODE_HYDEMY_NAME_PROXY }}
+  TF_VAR_SLACK_INCOMING_WEBHOOK_1ST: ${{ secrets.SLACK_INCOMING_WEBHOOK_1ST }}
 
 permissions:
   contents: read
