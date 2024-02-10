@@ -134,7 +134,9 @@ resource "aws_iam_role" "invoke_api_destination" {
 }
 
 resource "aws_iam_role_policy_attachment" "invoke_api_destination" {
-  for_each   = toset([aws_iam_policy.invoke_api_destination.arn])
+  for_each = {
+    a = aws_iam_policy.invoke_api_destination.arn
+  }
   policy_arn = each.value
   role       = aws_iam_role.invoke_api_destination.name
 }
