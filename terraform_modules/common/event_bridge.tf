@@ -31,10 +31,11 @@ resource "aws_cloudwatch_event_api_destination" "slack_incoming_webhooks" {
 }
 
 resource "aws_cloudwatch_event_target" "slack_incoming_webhooks" {
-  for_each = aws_cloudwatch_event_api_destination.slack_incoming_webhooks
-  arn      = each.value.arn
-  rule     = aws_cloudwatch_event_rule.slack_incoming_webhooks.name
-  role_arn = aws_iam_role.invoke_api_destination.arn
+  for_each       = aws_cloudwatch_event_api_destination.slack_incoming_webhooks
+  arn            = each.value.arn
+  rule           = aws_cloudwatch_event_rule.slack_incoming_webhooks.name
+  event_bus_name = aws_cloudwatch_event_bus.slack_incoming_webhooks.name
+  role_arn       = aws_iam_role.invoke_api_destination.arn
 
   input_transformer {
     input_template = "{\"blocks\": <blocks>}"
