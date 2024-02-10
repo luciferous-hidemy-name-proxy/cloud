@@ -1,0 +1,6 @@
+language: 'ja'
+reviews:
+  auto_review:
+    drafts: true
+chat:
+  auto_reply: true
