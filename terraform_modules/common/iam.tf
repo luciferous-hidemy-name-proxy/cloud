@@ -122,7 +122,7 @@ resource "aws_iam_role_policy_attachment" "call_hidemy_name" {
     d = aws_iam_policy.kms_decrypt.arn,
   }
   policy_arn = each.value
-  role       = aws_iam_role.call_hidemy_name.arn
+  role       = aws_iam_role.call_hidemy_name.name
 }
 
 # ================================================================
