@@ -115,12 +115,12 @@ resource "aws_iam_role" "call_hidemy_name" {
 }
 
 resource "aws_iam_role_policy_attachment" "call_hidemy_name" {
-  for_each = toset([
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-    "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
-    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess",
-    aws_iam_policy.kms_decrypt.arn,
-  ])
+  for_each = {
+    a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    b = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+    c = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess",
+    d = aws_iam_policy.kms_decrypt.arn,
+  }
   policy_arn = each.value
   role       = aws_iam_role.call_hidemy_name.arn
 }
