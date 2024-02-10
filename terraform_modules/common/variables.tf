@@ -17,5 +17,4 @@ variable "code_hidemy_name_proxy" {
 variable "slack_incoming_webhooks" {
   type      = list(string)
   nullable  = false
-  sensitive = true
 }
