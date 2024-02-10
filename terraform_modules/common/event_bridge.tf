@@ -27,8 +27,7 @@ resource "aws_cloudwatch_event_api_destination" "slack_incoming_webhooks" {
   connection_arn      = aws_cloudwatch_event_connection.dummy.arn
   http_method         = "POST"
   invocation_endpoint = each.value
-  # https://hooks.slack.com/services/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
-  name = replace(replace(each.value, "/", "_"), ":", "_")
+  name                = sha256(each.value)
 }
 
 resource "aws_cloudwatch_event_target" "slack_incoming_webhooks" {

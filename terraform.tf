@@ -44,6 +44,6 @@ variable "CODE_HYDEMY_NAME_PROXY" {
 }
 
 variable "SLACK_INCOMING_WEBHOOK_1ST" {
-  type      = string
-  nullable  = false
+  type     = string
+  nullable = false
 }
