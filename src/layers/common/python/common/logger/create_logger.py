@@ -11,6 +11,8 @@ def custom_default(obj):
         return num if (num := int(obj)) == obj else float(str(obj))
     if is_dataclass(obj):
         return str(obj) if isinstance(obj, Type) else asdict(obj)
+    if isinstance(obj, set):
+        return list(obj)
     try:
         return {"type": str(type(obj)), "value": str(obj)}
     except Exception as e:
