@@ -168,10 +168,10 @@ resource "aws_iam_role" "error_notificator" {
 }
 
 resource "aws_iam_role_policy_attachment" "error_notificator" {
-  for_each = [
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-    aws_iam_policy.put_events.arn
-  ]
+  for_each = {
+    a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    b = aws_iam_policy.put_events.arn
+  }
   policy_arn = each.value
   role       = aws_iam_role.error_notificator.name
 }
