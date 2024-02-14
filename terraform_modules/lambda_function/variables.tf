@@ -1,4 +1,4 @@
-variable "function_identifier" {
+variable "handler_dir" {
   type     = string
   nullable = false
 }

@@ -22,9 +22,9 @@ resource "aws_lambda_layer_version" "common" {
 module "tmp_001_v2" {
   source = "../lambda_function"
 
-  function_identifier = "tmp_001"
-  handler             = "index.handler"
-  memory_size         = 128
+  handler_dir = "tmp_001"
+  handler     = "index.handler"
+  memory_size = 128
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
     aws_lambda_layer_version.common.arn
@@ -47,10 +47,10 @@ module "tmp_001_v2" {
 module "error_notificator" {
   source = "../lambda_function_basic"
 
-  function_identifier = "error-notificator"
-  handler             = "error_notificator.handler"
-  memory_size         = 256
-  role_arn            = aws_iam_role.error_notificator.arn
+  handler_dir = "error_notificator"
+  handler     = "error_notificator.handler"
+  memory_size = 256
+  role_arn    = aws_iam_role.error_notificator.arn
   environment_variables = {
     EVENT_BUS_NAME = aws_cloudwatch_event_bus.slack_incoming_webhooks.name
   }
