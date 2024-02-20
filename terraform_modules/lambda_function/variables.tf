@@ -58,3 +58,8 @@ variable "alias" {
   nullable = false
   default  = "alias"
 }
+
+variable "subscription_destination_lambda_arn" {
+  type     = string
+  nullable = false
+}

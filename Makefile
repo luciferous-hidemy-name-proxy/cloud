@@ -17,7 +17,8 @@ fmt-python-black:
 fmt-terraform: \
 	fmt-terraform-root \
 	fmt-terraform-common \
-	fmt-terraform-lambda-function-basic
+	fmt-terraform-lambda-function-basic \
+	fmt-terraform-lambda-function
 
 fmt-terraform-root:
 	terraform fmt
@@ -28,6 +29,10 @@ fmt-terraform-common:
 
 fmt-terraform-lambda-function-basic:
 	cd terraform_modules/lambda_function_basic && \
+	terraform fmt
+
+fmt-terraform-lambda-function:
+	cd terraform_modules/lambda_function && \
 	terraform fmt
 
 .PHONY: \

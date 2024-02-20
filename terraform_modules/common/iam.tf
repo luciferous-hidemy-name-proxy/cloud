@@ -59,7 +59,7 @@ resource "aws_iam_policy" "kms_decrypt" {
 }
 
 # ================================================================
-# tmp lambda role
+# Policy Invoke API Destination (EventBridge)
 # ================================================================
 
 data "aws_iam_policy_document" "policy_invoke_api_destination" {
@@ -74,6 +74,24 @@ data "aws_iam_policy_document" "policy_invoke_api_destination" {
 
 resource "aws_iam_policy" "invoke_api_destination" {
   policy = data.aws_iam_policy_document.policy_invoke_api_destination.json
+}
+
+# ================================================================
+# Policy Put Events (EventBridge)
+# ================================================================
+
+data "aws_iam_policy_document" "policy_put_events" {
+  policy_id = "policy_put_events"
+  statement {
+    sid       = "AllowPutEvents"
+    effect    = "Allow"
+    actions   = ["events:PutEvents"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "put_events" {
+  policy = data.aws_iam_policy_document.policy_put_events.json
 }
 
 # ================================================================
@@ -139,4 +157,21 @@ resource "aws_iam_role_policy_attachment" "invoke_api_destination" {
   }
   policy_arn = each.value
   role       = aws_iam_role.invoke_api_destination.name
+}
+
+# ================================================================
+# Role error_notificator
+# ================================================================
+
+resource "aws_iam_role" "error_notificator" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_lambda.json
+}
+
+resource "aws_iam_role_policy_attachment" "error_notificator" {
+  for_each = {
+    a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    b = aws_iam_policy.put_events.arn
+  }
+  policy_arn = each.value
+  role       = aws_iam_role.error_notificator.name
 }

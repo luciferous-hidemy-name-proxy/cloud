@@ -1,1 +1,1 @@
-resource "aws_sns_topic" "tmp" {}
+resource "aws_sns_topic" "root_error_notifier" {}
