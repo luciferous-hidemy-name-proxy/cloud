@@ -178,7 +178,7 @@ def create_slack_payload(
             "text": {
                 "type": "mrkdwn",
                 "text": "*Datetime:* `{0}`".format(
-                    datetime.fromtimestamp(log_event.timestamp, tz=JST)
+                    datetime.fromtimestamp(log_event.timestamp / 1000, tz=JST)
                 ),
             },
         },

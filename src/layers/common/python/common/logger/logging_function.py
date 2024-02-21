@@ -26,7 +26,11 @@ def logging_function(
                 result = func(*args, **kwargs)
                 return result
             except Exception as e:
-                logger.debug(f"error occurred: {e}", exc_info=True)
+                logger.debug(
+                    f"error occurred: {e}",
+                    exc_info=True,
+                    data={"args": args, "kwargs": kwargs},
+                )
                 is_error = True
                 raise
             finally:

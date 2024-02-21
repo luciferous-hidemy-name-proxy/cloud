@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from mypy_boto3_dynamodb import DynamoDBClient
+from time import sleep
 
 from common.dataclasses import load_environment
 from common.http import HttpGetOption, http_sec3_client
 from common.logger import create_logger, logging_function, logging_handler
+from mypy_boto3_dynamodb import DynamoDBClient
 
 
 @dataclass(frozen=True)
@@ -18,6 +19,7 @@ url = "https://ifconfig.io/ip"
 
 @logging_handler(logger)
 def handler(event, context):
+    sleep(30)
     env = load_environment(class_dataclass=EnvironmentVariables)
     ip_without_proxy = request_without_proxy()
     ip_with_proxy = request_with_proxy(env=env)

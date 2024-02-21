@@ -25,6 +25,7 @@ module "tmp_001_v2" {
   handler_dir = "tmp_001"
   handler     = "index.handler"
   memory_size = 128
+  timeout     = 10
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
     aws_lambda_layer_version.common.arn
