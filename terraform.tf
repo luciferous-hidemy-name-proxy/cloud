@@ -26,10 +26,13 @@ provider "aws" {
 module "common" {
   source = "./terraform_modules/common"
 
-  system_name             = local.system_name
-  region                  = local.region
-  code_hidemy_name_proxy  = var.CODE_HYDEMY_NAME_PROXY
-  slack_incoming_webhooks = [var.SLACK_INCOMING_WEBHOOK_1ST]
+  system_name            = local.system_name
+  region                 = local.region
+  code_hidemy_name_proxy = var.CODE_HYDEMY_NAME_PROXY
+  slack_incoming_webhooks = [
+    var.SLACK_INCOMING_WEBHOOK_1ST,
+    var.SLACK_INCOMING_WEBHOOK_2ND,
+  ]
 }
 
 locals {
@@ -44,6 +47,11 @@ variable "CODE_HYDEMY_NAME_PROXY" {
 }
 
 variable "SLACK_INCOMING_WEBHOOK_1ST" {
+  type     = string
+  nullable = false
+}
+
+variable "SLACK_INCOMING_WEBHOOK_2ND" {
   type     = string
   nullable = false
 }
