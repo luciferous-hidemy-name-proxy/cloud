@@ -115,7 +115,7 @@ def create_url_lambda(*, function_name: str, region: str) -> str:
     )
 
 
-@logging_function(logger)
+@logging_function(logger, write=True, with_return=True)
 def parse_message(*, log_event: CloudWatchLogsLogEvent) -> LogMessage:
     try:
         data: PowertoolsLogRecord = json.loads(log_event.message)

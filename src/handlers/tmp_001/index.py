@@ -19,6 +19,7 @@ url = "https://ifconfig.io/ip"
 
 @logging_handler(logger)
 def handler(event, context):
+    raise Exception("afeoiwajfoiwef")
     sleep(30)
     env = load_environment(class_dataclass=EnvironmentVariables)
     ip_without_proxy = request_without_proxy()
