@@ -47,3 +47,7 @@ variable "SLACK_INCOMING_WEBHOOK_1ST" {
   type     = string
   nullable = false
 }
+
+output "sns_topic_error_notificator" {
+  value = module.common.sns_topic_error_notificator
+}
