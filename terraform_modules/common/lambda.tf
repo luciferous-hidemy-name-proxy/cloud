@@ -54,6 +54,7 @@ module "error_notificator" {
   role_arn    = aws_iam_role.error_notificator.arn
   environment_variables = {
     EVENT_BUS_NAME = aws_cloudwatch_event_bus.slack_incoming_webhooks.name
+    SYSTEM_NAME    = var.system_name
   }
 
   layers = [

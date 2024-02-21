@@ -26,6 +26,7 @@ from mypy_boto3_events import EventBridgeClient
 class EnvironmentVariables:
     event_bus_name: str
     aws_default_region: str
+    system_name: str
 
 
 @dataclass(frozen=True)
@@ -54,6 +55,7 @@ def handler(
             log_group=decompressed_log.log_group,
             log_stream=decompressed_log.log_stream,
             region=env.aws_default_region,
+            system_name=env.system_name,
             log_event=log_event,
         )
         for log_event in decompressed_log.log_events
@@ -144,7 +146,12 @@ def parse_message(*, log_event: CloudWatchLogsLogEvent) -> LogMessage:
 
 @logging_function(logger)
 def create_slack_payload(
-    *, log_group: str, log_stream: str, region: str, log_event: CloudWatchLogsLogEvent
+    *,
+    log_group: str,
+    log_stream: str,
+    region: str,
+    system_name: str,
+    log_event: CloudWatchLogsLogEvent,
 ) -> str:
     function_name = basename(log_group)
     log_message = parse_message(log_event=log_event)
@@ -157,6 +164,13 @@ def create_slack_payload(
             },
         },
         {"type": "divider"},
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "*System Name:* `{0}`".format(system_name),
+            },
+        },
         {
             "type": "section",
             "text": {
