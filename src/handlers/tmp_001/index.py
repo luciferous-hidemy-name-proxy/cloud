@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from mypy_boto3_dynamodb import DynamoDBClient
 
 from common.dataclasses import load_environment
 from common.http import HttpGetOption, http_sec3_client
@@ -38,3 +39,19 @@ def request_with_proxy(*, env: EnvironmentVariables) -> str:
     option = HttpGetOption(url=url, kwargs={"proxies": {"http": proxy, "https": proxy}})
     resp = http_sec3_client(option)
     return resp.text.strip()
+
+
+class UserNotFoundError(Exception):
+    pass
+
+
+def tmp(client: DynamoDBClient, table_name, serialized):
+    try:
+        client.put_item(
+            TableName=table_name,
+            Item=serialized,
+            ConditionExpression="attribute_exists(#user_id)",
+            ExpressionAttributeNames={"#user_id": "user_id"},
+        )
+    except client.exceptions.ConditionalCheckFailedException:
+        raise UserNotFoundError()
