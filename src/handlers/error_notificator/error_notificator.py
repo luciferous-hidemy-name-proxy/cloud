@@ -182,6 +182,20 @@ def create_slack_payload(
                 ),
             },
         },
+    ]
+    if log_message.lambda_request_id is not None:
+        blocks.append(
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*Lambda Request ID:* `{0}`".format(
+                        log_message.lambda_request_id
+                    ),
+                },
+            }
+        )
+    blocks += [
         {
             "type": "section",
             "text": {
