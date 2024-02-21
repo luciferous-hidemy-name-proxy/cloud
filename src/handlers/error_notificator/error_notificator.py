@@ -240,7 +240,7 @@ def create_slack_payload(
             },
         },
     ]
-    if log_message.error_message is None:
+    if log_message.error_message is not None:
         blocks += [
             {
                 "type": "section",
