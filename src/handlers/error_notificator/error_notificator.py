@@ -87,7 +87,12 @@ def create_url_cw_logs(
     ]
     if lambda_request_id is None:
         start = timestamp - 900_000  # 1000 ms/s * 60 s/m * 15 m = 900,000 ms
-        part.append(quote_plus(f"start={start}").replace("%", "$"))
+        end = timestamp + 10_000
+        part += [
+            quote_plus(f"start={start}").replace("%", "$"),
+            quote_plus("&").replace("%", "$"),
+            quote_plus(f"end={end}").replace("%", "$"),
+        ]
     else:
         part += [
             quote_plus("filterPattern=").replace("%", "$"),
