@@ -71,22 +71,6 @@ resource "aws_lambda_permission" "error_notificator" {
   principal     = "logs.amazonaws.com"
 }
 
-resource "aws_cloudwatch_metric_alarm" "error_notificator" {
-  alarm_name          = module.error_notificator.function_name
-  alarm_actions       = [aws_sns_topic.root_error_notifier.arn]
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 1
-  datapoints_to_alarm = 1
-  dimensions = {
-    FunctionName = module.error_notificator.function_name
-  }
-  metric_name        = "Errors"
-  namespace          = "AWS/Lambda"
-  period             = 60
-  statistic          = "Sum"
-  treat_missing_data = "notBreaching"
-}
-
 # ================================================================
 # Lambda Call hidemy name
 # ================================================================
@@ -113,4 +97,11 @@ module "call_hidemy_name" {
   system_name                         = var.system_name
   region                              = var.region
   subscription_destination_lambda_arn = module.error_notificator.function_arn
+}
+
+resource "aws_lambda_permission" "call_hidemy_name" {
+  action        = "lambda:InvokeFunction"
+  function_name = module.call_hidemy_name.function_alias_arn
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.call_hidemy_name.arn
 }

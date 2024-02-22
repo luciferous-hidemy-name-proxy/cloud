@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 from sys import version
 from typing import Callable
@@ -5,6 +6,19 @@ from typing import Callable
 import boto3
 import botocore
 from aws_lambda_powertools import Logger
+
+EXCLUDE_ENV_KEYS = {
+    "AWS_ACCESS_KEY_ID",
+    "AWS_LAMBDA_LOG_GROUP_NAME",
+    "AWS_LAMBDA_LOG_STREAM_NAME",
+    "AWS_LAMBDA_RUNTIME_API",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_SESSION_TOKEN",
+    "AWS_XRAY_CONTEXT_MISSING",
+    "AWS_XRAY_DAEMON_ADDRESS",
+    "_AWS_XRAY_DAEMON_ADDRESS",
+    "_AWS_XRAY_DAEMON_PORT",
+}
 
 
 def logging_handler(logger: Logger, *, with_return: bool = False) -> Callable:
@@ -16,9 +30,17 @@ def logging_handler(logger: Logger, *, with_return: bool = False) -> Callable:
                 logger.debug(
                     "event, python/boto3/botocore version, environment variables",
                     data={
-                        "python": version,
-                        "boto3": boto3.__version__,
-                        "botocore": botocore.__version__,
+                        "version": {
+                            "python": version,
+                            "boto3": boto3.__version__,
+                            "botocore": botocore.__version__,
+                        },
+                        "event": event,
+                        "env": {
+                            k: os.getenv(k)
+                            for k in sorted(os.environ.keys())
+                            if k not in EXCLUDE_ENV_KEYS
+                        },
                     },
                 )
             except Exception as e:

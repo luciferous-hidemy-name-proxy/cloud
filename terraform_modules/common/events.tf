@@ -1,3 +1,7 @@
+# ================================================================
+# Error Notificator
+# ================================================================
+
 resource "aws_cloudwatch_event_bus" "slack_incoming_webhooks" {
   name = "slack_incoming_webhooks"
 }
@@ -43,4 +47,19 @@ resource "aws_cloudwatch_event_target" "slack_incoming_webhooks" {
       blocks = "$.detail.blocks"
     }
   }
+}
+
+# ================================================================
+# Call hidemy name
+# ================================================================
+
+resource "aws_cloudwatch_event_rule" "call_hidemy_name" {
+  name_prefix         = "call_hidemy_name"
+  is_enabled          = true
+  schedule_expression = "cron(0 * * * ? *)" # UTC 毎時00分に実行する
+}
+
+resource "aws_cloudwatch_event_target" "call_hidemy_name" {
+  rule = aws_cloudwatch_event_rule.call_hidemy_name.name
+  arn  = module.call_hidemy_name.function_alias_arn
 }

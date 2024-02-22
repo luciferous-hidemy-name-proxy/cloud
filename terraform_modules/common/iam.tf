@@ -175,3 +175,20 @@ resource "aws_iam_role_policy_attachment" "error_notificator" {
   policy_arn = each.value
   role       = aws_iam_role.error_notificator.name
 }
+
+# ================================================================
+# Role error_notificator
+# ================================================================
+
+resource "aws_iam_role" "check_proxy" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_lambda.json
+}
+
+resource "aws_iam_role_policy_attachment" "error_notificator" {
+  for_each = {
+    a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    b = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+  }
+  policy_arn = each.value
+  role       = aws_iam_role.check_proxy.name
+}
