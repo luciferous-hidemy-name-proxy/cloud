@@ -99,10 +99,16 @@ module "call_hidemy_name" {
   memory_size      = 128
   timeout          = 300
   role_arn         = aws_iam_role.call_hidemy_name.arn
+
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
     aws_lambda_layer_version.common.arn
   ]
+
+  environment_variables = {
+    SSM_PARAMETER_NAME_CODE_HIDEMY_NAME = aws_ssm_parameter.code_hidemy_name_proxy.name
+    TABLE_NAME_TEMP_STORE               = aws_dynamodb_table.temp_store.name
+  }
 
   system_name                         = var.system_name
   region                              = var.region
