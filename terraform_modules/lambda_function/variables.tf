@@ -1,4 +1,4 @@
-variable "handler_dir" {
+variable "handler_dir_name" {
   type     = string
   nullable = false
 }

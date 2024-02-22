@@ -22,10 +22,10 @@ resource "aws_lambda_layer_version" "common" {
 module "tmp_001_v2" {
   source = "../lambda_function"
 
-  handler_dir = "tmp_001"
-  handler     = "index.handler"
-  memory_size = 128
-  timeout     = 10
+  handler_dir_name = "tmp_001"
+  handler          = "index.handler"
+  memory_size      = 128
+  timeout          = 10
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
     aws_lambda_layer_version.common.arn
@@ -34,11 +34,11 @@ module "tmp_001_v2" {
     PROXY_HOST = "185.231.115.246"
     PROXY_PORT = "7237"
   }
-  subscription_destination_lambda_arn = module.error_notificator.function_arn
+  role_arn = aws_iam_role.tmp.arn
 
-  system_name = var.system_name
-  role_arn    = aws_iam_role.tmp.arn
-  region      = var.region
+  system_name                         = var.system_name
+  region                              = var.region
+  subscription_destination_lambda_arn = module.error_notificator.function_arn
 }
 
 # ================================================================
@@ -48,10 +48,10 @@ module "tmp_001_v2" {
 module "error_notificator" {
   source = "../lambda_function_basic"
 
-  handler_dir = "error_notificator"
-  handler     = "error_notificator.handler"
-  memory_size = 256
-  role_arn    = aws_iam_role.error_notificator.arn
+  handler_dir_name = "error_notificator"
+  handler          = "error_notificator.handler"
+  memory_size      = 256
+  role_arn         = aws_iam_role.error_notificator.arn
   environment_variables = {
     EVENT_BUS_NAME = aws_cloudwatch_event_bus.slack_incoming_webhooks.name
     SYSTEM_NAME    = var.system_name
@@ -85,4 +85,26 @@ resource "aws_cloudwatch_metric_alarm" "error_notificator" {
   period             = 60
   statistic          = "Sum"
   treat_missing_data = "notBreaching"
+}
+
+# ================================================================
+# Lambda Call hidemy name
+# ================================================================
+
+module "call_hidemy_name" {
+  source = "../lambda_function"
+
+  handler_dir_name = "call_hidemy_name"
+  handler          = "call_hidemy_name.handler"
+  memory_size      = 128
+  timeout          = 300
+  role_arn         = aws_iam_role.call_hidemy_name.arn
+  layers = [
+    data.aws_ssm_parameter.base_layer_arn.value,
+    aws_lambda_layer_version.common.arn
+  ]
+
+  system_name                         = var.system_name
+  region                              = var.region
+  subscription_destination_lambda_arn = module.error_notificator.function_arn
 }

@@ -1,11 +1,11 @@
 data "archive_file" "package" {
   type        = "zip"
-  output_path = "function_${var.handler_dir}.zip"
-  source_dir  = "${path.root}/src/handlers/${var.handler_dir}"
+  output_path = "function_${var.handler_dir_name}.zip"
+  source_dir  = "${path.root}/src/handlers/${var.handler_dir_name}"
 }
 
 resource "aws_lambda_function" "function" {
-  function_name    = replace("${var.system_name}-${var.handler_dir}", "_", "-")
+  function_name    = replace("${var.system_name}-${var.handler_dir_name}", "_", "-")
   role             = var.role_arn
   runtime          = var.runtime
   architectures    = ["arm64"]

@@ -1,7 +1,7 @@
 module "function" {
   source = "../lambda_function_basic"
 
-  handler_dir           = var.handler_dir
+  handler_dir_name      = var.handler_dir_name
   system_name           = var.system_name
   role_arn              = var.role_arn
   runtime               = var.runtime
