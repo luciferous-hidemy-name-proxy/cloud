@@ -55,7 +55,7 @@ resource "aws_cloudwatch_event_target" "slack_incoming_webhooks" {
 
 resource "aws_cloudwatch_event_rule" "call_hidemy_name" {
   name_prefix         = "call_hidemy_name"
-  is_enabled          = true
+  is_enabled          = false
   schedule_expression = "cron(0 * * * ? *)" # UTC 毎時00分に実行する
 }
 
