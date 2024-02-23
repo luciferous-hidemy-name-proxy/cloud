@@ -108,16 +108,16 @@ resource "aws_lambda_permission" "call_hidemy_name" {
 }
 
 # ================================================================
-# Lambda check_proxy
+# Lambda check_proxy_checker
 # ================================================================
 
-module "check_proxy" {
+module "check_proxy_checker" {
   source = "../lambda_function"
 
-  handler_dir_name = "check_proxy"
-  handler          = "check_proxy.handler"
+  handler_dir_name = "check_proxy_checker"
+  handler          = "check_proxy_checker.handler"
   memory_size      = 128
-  timeout          = aws_sqs_queue.check_proxy.visibility_timeout_seconds
+  timeout          = aws_sqs_queue.check_proxy_checker.visibility_timeout_seconds
   role_arn         = aws_iam_role.check_proxy.arn
 
   layers = [
@@ -130,11 +130,25 @@ module "check_proxy" {
   subscription_destination_lambda_arn = module.error_notificator.function_arn
 }
 
-resource "aws_lambda_event_source_mapping" "check_proxy" {
-  event_source_arn = aws_sqs_queue.check_proxy.arn
-  function_name    = module.check_proxy.function_alias_arn
-  batch_size       = 1
-  scaling_config {
-    maximum_concurrency = 50
-  }
+# ================================================================
+# Lambda check_proxy_closer
+# ================================================================
+
+module "check_proxy_closer" {
+  source = "../lambda_function"
+
+  handler_dir_name = "check_proxy_closer"
+  handler          = "check_proxy_closer.handler"
+  memory_size      = 128
+  timeout          = aws_sqs_queue.check_proxy_closer.visibility_timeout_seconds
+  role_arn         = aws_iam_role.check_proxy.arn
+
+  layers = [
+    data.aws_ssm_parameter.base_layer_arn.value,
+    aws_lambda_layer_version.common.arn
+  ]
+
+  system_name                         = var.system_name
+  region                              = var.region
+  subscription_destination_lambda_arn = module.error_notificator.function_arn
 }
