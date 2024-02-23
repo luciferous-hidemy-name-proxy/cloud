@@ -42,6 +42,12 @@ variable "layers" {
   default  = []
 }
 
+variable "reserved_concurrent_executions" {
+  type     = number
+  nullable = true
+  default  = null
+}
+
 variable "region" {
   type     = string
   nullable = false

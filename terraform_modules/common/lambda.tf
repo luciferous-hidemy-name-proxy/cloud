@@ -101,7 +101,8 @@ module "call_hidemy_name" {
 
 resource "aws_lambda_permission" "call_hidemy_name" {
   action        = "lambda:InvokeFunction"
-  function_name = module.call_hidemy_name.function_alias_arn
+  function_name = module.call_hidemy_name.function_name
+  qualifier     = module.call_hidemy_name.function_alias_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.call_hidemy_name.arn
 }
@@ -113,11 +114,11 @@ resource "aws_lambda_permission" "call_hidemy_name" {
 module "check_proxy" {
   source = "../lambda_function"
 
-  handler_dir_name = "check_proxy"
-  handler          = "check_proxy.handler"
-  memory_size      = 128
-  timeout          = 300
-  role_arn         = aws_iam_role.check_proxy.arn
+  handler_dir_name               = "check_proxy"
+  handler                        = "check_proxy.handler"
+  memory_size                    = 128
+  timeout                        = aws_sqs_queue.check_proxy.visibility_timeout_seconds
+  role_arn                       = aws_iam_role.check_proxy.arn
 
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
@@ -132,4 +133,8 @@ module "check_proxy" {
 resource "aws_lambda_event_source_mapping" "check_proxy" {
   event_source_arn = aws_sqs_queue.check_proxy.arn
   function_name    = module.check_proxy.function_alias_arn
+  batch_size = 1
+  scaling_config {
+    maximum_concurrency = 50
+  }
 }
