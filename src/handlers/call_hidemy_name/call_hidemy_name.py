@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 from urllib.request import urlopen
 from uuid import uuid4
@@ -7,6 +7,7 @@ from uuid import uuid4
 from common.aws import create_client, create_resource
 from common.dataclasses import load_environment
 from common.logger import create_logger, logging_function, logging_handler
+from common.models import DynamoDBTempData
 from mypy_boto3_dynamodb import DynamoDBServiceResource
 from mypy_boto3_dynamodb.service_resource import Table
 from mypy_boto3_ssm import SSMClient
@@ -65,6 +66,13 @@ def put_items(*, items: list[str], table_name: str, resource: DynamoDBServiceRes
 
     v_uuid = str(uuid4())
 
+    converted_items = [
+        DynamoDBTempData(
+            uuid=v_uuid, host=host, ttl=ttl, checked=False, force_check=False
+        )
+        for host in set(items)
+    ]
+
     with table.batch_writer() as batch:
-        for host in items:
-            batch.put_item(Item={"uuid": v_uuid, "host": host, "ttl": ttl})
+        for x in converted_items:
+            batch.put_item(Item=asdict(x))
