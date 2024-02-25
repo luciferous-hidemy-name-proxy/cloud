@@ -14,7 +14,7 @@ class ParsedEvent:
 logger = create_logger(__name__)
 
 
-@event_source(data_class=SQSEvent)
 @logging_handler(logger)
+@event_source(data_class=SQSEvent)
 def handler(event: dict, context):
     pass
