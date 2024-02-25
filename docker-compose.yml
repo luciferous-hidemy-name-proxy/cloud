@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  localstack:
+    container_name: luciferous-hidemy-name-proxy-localstack
+    image: localstack/localstack:3.1.0
+    ports:
+      - "127.0.0.1:4566:4566"
+    environment:
+      SERVICE: dynamodb,s3,sqs
+      EAGER_SERVICE_LOADING: "0"

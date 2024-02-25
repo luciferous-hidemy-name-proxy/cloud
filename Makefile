@@ -9,10 +9,10 @@ fmt-python: \
 	fmt-python-black
 
 fmt-python-isort:
-	poetry run isort --profile black src/
+	poetry run isort --profile black src/ tests/
 
 fmt-python-black:
-	poetry run black src/
+	poetry run black src/ tests/
 
 fmt-terraform: \
 	fmt-terraform-root \
@@ -34,6 +34,13 @@ fmt-terraform-lambda-function-basic:
 fmt-terraform-lambda-function:
 	cd terraform_modules/lambda_function && \
 	terraform fmt
+
+test-unit:
+	AWS_ACCESS_KEY_ID=dummy \
+	AWS_SECRET_ACCESS_KEY=dummy \
+	AWS_DEFAULT_REGION=ap-northeast-1 \
+	PYTHONPATH=src/handlers:src/layers/common/python \
+	poetry run pytest -vv tests/unit
 
 .PHONY: \
 	format \

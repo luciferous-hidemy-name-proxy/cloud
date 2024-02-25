@@ -17,6 +17,7 @@ pysocks = "1.7.1"
 black = "^24.1.1"
 isort = "^5.13.2"
 aws-lambda-powertools = {version = "2.32.0", extras = ["all"]}
+pytest = "^8.0.2"
 
 [build-system]
 requires = ["poetry-core"]

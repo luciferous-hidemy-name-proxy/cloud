@@ -12,7 +12,7 @@ class DynamoDBTempData:
     host: str
     ttl: int
     checked: bool
-    available: Optional[bool]
+    available: bool
     force_check: bool
 
     @staticmethod
@@ -27,6 +27,6 @@ class DynamoDBTempData:
                 host=x,
                 ttl=ttl,
                 checked=False,
-                available=None,
+                available=False,
                 force_check=False,
             )
