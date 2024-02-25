@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+import urllib3
 from aws_lambda_powertools.utilities.data_classes import SQSEvent, event_source
 from aws_lambda_powertools.utilities.data_classes.sqs_event import SQSRecord
 from common.aws import create_resource
@@ -7,6 +8,7 @@ from common.logger import create_logger, logging_function, logging_handler
 from mypy_boto3_dynamodb.service_resource import DynamoDBServiceResource, Table
 from mypy_boto3_dynamodb.type_defs import UpdateItemOutputTableTypeDef
 from requests import get as http_get
+from urllib3.exceptions import InsecureRequestWarning
 
 
 @dataclass(frozen=True)
@@ -16,6 +18,7 @@ class ParsedEvent:
     table_name: str
 
 
+urllib3.disable_warnings(InsecureRequestWarning)
 logger = create_logger(__name__)
 
 
@@ -55,6 +58,7 @@ def check_proxy(*, host: str) -> bool:
             url="https://ifconfig.io/ip",
             proxies={"http": proxy, "https": proxy},
             timeout=(15, 150),
+            verify=False,
         )
         return resp.status_code == 200
     except Exception:
