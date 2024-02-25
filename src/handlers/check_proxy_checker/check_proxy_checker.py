@@ -58,6 +58,7 @@ def check_proxy(*, host: str) -> bool:
         )
         return resp.status_code == 200
     except Exception:
+        logger.debug("error occurred in check proxy", exc_info=True)
         return False
 
 
