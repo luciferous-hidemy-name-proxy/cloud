@@ -52,7 +52,9 @@ def check_proxy(*, host: str) -> bool:
     proxy = f"socks5h://{host}"
     try:
         resp = http_get(
-            url="https://ifconfig.io/ip", proxies={"http": proxy, "https": proxy}
+            url="https://ifconfig.io/ip",
+            proxies={"http": proxy, "https": proxy},
+            timeout=(15, 150),
         )
         return resp.status_code == 200
     except Exception:
