@@ -162,6 +162,13 @@ module "check_proxy_closer" {
     aws_lambda_layer_version.common.arn
   ]
 
+  environment_variables = {
+    S3_BUCKET      = aws_s3_bucket.data.bucket
+    S3_KEY         = local.s3.data_key
+    DYNAMODB_TABLE = aws_dynamodb_table.temp_store.name
+    SQS_QUEUE_URL  = aws_sqs_queue.check_proxy_checker.url
+  }
+
   system_name                         = var.system_name
   region                              = var.region
   subscription_destination_lambda_arn = module.error_notificator.function_arn
