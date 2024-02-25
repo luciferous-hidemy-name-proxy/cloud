@@ -1,8 +1,6 @@
 import json
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta, timezone
 from urllib.request import urlopen
-from uuid import uuid4
 
 from common.aws import create_client, create_resource
 from common.dataclasses import load_environment
@@ -61,18 +59,6 @@ def convert_response(*, resp: list[dict]) -> list[str]:
 def put_items(*, items: list[str], table_name: str, resource: DynamoDBServiceResource):
     table: Table = resource.Table(table_name)
 
-    dt_ttl = datetime.now(tz=timezone.utc) + timedelta(days=3)
-    ttl = int(dt_ttl.timestamp())
-
-    v_uuid = str(uuid4())
-
-    converted_items = [
-        DynamoDBTempData(
-            uuid=v_uuid, host=host, ttl=ttl, checked=False, force_check=False
-        )
-        for host in set(items)
-    ]
-
     with table.batch_writer() as batch:
-        for x in converted_items:
+        for x in DynamoDBTempData.from_iter(hosts=items):
             batch.put_item(Item=asdict(x))
