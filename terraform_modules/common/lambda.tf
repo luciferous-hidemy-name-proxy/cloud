@@ -130,6 +130,18 @@ module "check_proxy_checker" {
   subscription_destination_lambda_arn = module.error_notificator.function_arn
 }
 
+resource "aws_lambda_event_source_mapping" "check_proxy_checker" {
+  event_source_arn = aws_sqs_queue.check_proxy_checker.arn
+  function_name    = module.check_proxy_checker.function_alias_arn
+  batch_size       = 1
+  enabled          = true
+
+  maximum_batching_window_in_seconds = aws_sqs_queue.check_proxy_checker.visibility_timeout_seconds
+  scaling_config {
+    maximum_concurrency = 100
+  }
+}
+
 # ================================================================
 # Lambda check_proxy_closer
 # ================================================================
@@ -143,6 +155,8 @@ module "check_proxy_closer" {
   timeout          = aws_sqs_queue.check_proxy_closer.visibility_timeout_seconds
   role_arn         = aws_iam_role.check_proxy.arn
 
+  reserved_concurrent_executions = 1
+
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
     aws_lambda_layer_version.common.arn
@@ -151,4 +165,13 @@ module "check_proxy_closer" {
   system_name                         = var.system_name
   region                              = var.region
   subscription_destination_lambda_arn = module.error_notificator.function_arn
+}
+
+resource "aws_lambda_event_source_mapping" "check_proxy_closer" {
+  event_source_arn = aws_sqs_queue.check_proxy_closer.arn
+  function_name    = module.check_proxy_closer.function_alias_arn
+  batch_size       = 10
+  enabled          = true
+
+  maximum_batching_window_in_seconds = aws_sqs_queue.check_proxy_closer.visibility_timeout_seconds
 }

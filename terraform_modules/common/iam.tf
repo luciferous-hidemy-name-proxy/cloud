@@ -95,6 +95,24 @@ resource "aws_iam_policy" "put_events" {
 }
 
 # ================================================================
+# Policy Send Message (SQS)
+# ================================================================
+
+data "aws_iam_policy_document" "policy_sqs_send_message" {
+  policy_id = "policy_sqs_send_message"
+  statement {
+    sid       = "AllowSQSSendMessage"
+    effect    = "Allow"
+    actions   = ["sqs:SendMessage"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "sqs_send_message" {
+  policy = data.aws_iam_policy_document.policy_sqs_send_message.json
+}
+
+# ================================================================
 # tmp lambda role
 # ================================================================
 
@@ -188,6 +206,8 @@ resource "aws_iam_role_policy_attachment" "check_proxy" {
   for_each = {
     a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
     b = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+    c = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+    d = aws_iam_policy.sqs_send_message.arn
   }
   policy_arn = each.value
   role       = aws_iam_role.check_proxy.name
