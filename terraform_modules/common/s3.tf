@@ -5,5 +5,5 @@ locals {
 }
 
 resource "aws_s3_bucket" "data" {
-  bucket_prefix = "data_"
+  bucket_prefix = "data-"
 }
