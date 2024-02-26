@@ -207,7 +207,8 @@ resource "aws_iam_role_policy_attachment" "check_proxy" {
     a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
     b = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
     c = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
-    d = aws_iam_policy.sqs_send_message.arn
+    d = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+    e = aws_iam_policy.sqs_send_message.arn
   }
   policy_arn = each.value
   role       = aws_iam_role.check_proxy.name
