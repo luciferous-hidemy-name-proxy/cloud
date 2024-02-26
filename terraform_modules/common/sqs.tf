@@ -5,5 +5,5 @@ resource "aws_sqs_queue" "check_proxy_checker" {
 
 resource "aws_sqs_queue" "check_proxy_closer" {
   name_prefix                = "check_proxy_closer_"
-  visibility_timeout_seconds = 300
+  visibility_timeout_seconds = 30
 }
