@@ -69,7 +69,7 @@ def handler(
         )
 
 
-@logging_function(logger)
+@logging_function(logger, write=True)
 def parse_event(*, event: SQSEvent) -> dict[str, dict[str, str]]:
     result = {}
 
@@ -84,12 +84,12 @@ def parse_event(*, event: SQSEvent) -> dict[str, dict[str, str]]:
     return result
 
 
-@logging_function(logger)
+@logging_function(logger, write=True)
 def query(*, uuid: str, table: Table) -> list[Item]:
     result = []
     is_first = True
     token = None
-    while token is None or is_first:
+    while token is not None or is_first:
         if is_first:
             is_first = False
         option: QueryInputTableQueryTypeDef = {
@@ -111,7 +111,7 @@ def query(*, uuid: str, table: Table) -> list[Item]:
     return result
 
 
-@logging_function(logger)
+@logging_function(logger, write=True, with_return=True)
 def analyze(*, items: list[Item]) -> ProcessInfo:
     hosts_available = set()
     hosts_force_check = set()
@@ -133,7 +133,7 @@ def analyze(*, items: list[Item]) -> ProcessInfo:
         return ProcessInfo(type=ProcessType.Uncompleted, hosts=set())
 
 
-@logging_function(logger)
+@logging_function(logger, write=True)
 def send_messages(*, queue_url: str, data_inputs: dict[str, str], client: SQSClient):
     length = len(data_inputs)
     mapping_inputs = {sha3_224(k.encode()): v for k, v in data_inputs.items()}
@@ -150,14 +150,14 @@ def send_messages(*, queue_url: str, data_inputs: dict[str, str], client: SQSCli
         union_succeeded |= set([x["Id"] for x in resp.get("Successful", [])])
 
 
-@logging_function(logger)
+@logging_function(logger, write=True)
 def put_available_hosts(*, bucket: str, key: str, hosts: list[str], client: S3Client):
     client.put_object(
         Bucket=bucket, Key=key, Body=json.dumps(hosts, ensure_ascii=False)
     )
 
 
-@logging_function(logger)
+@logging_function(logger, write=True)
 def process(
     *,
     uuid: str,
