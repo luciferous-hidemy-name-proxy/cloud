@@ -56,6 +56,11 @@ variable "SLACK_INCOMING_WEBHOOK_2ND" {
   nullable = false
 }
 
+variable "MY_API_SECRET" {
+  type = string
+  nullable = false
+}
+
 output "sns_topic_error_notificator" {
   value = module.common.sns_topic_error_notificator
 }

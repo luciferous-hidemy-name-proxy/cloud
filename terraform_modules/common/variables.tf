@@ -18,3 +18,8 @@ variable "slack_incoming_webhooks" {
   type     = list(string)
   nullable = false
 }
+
+variable "my_api_secret" {
+  type = string
+  nullable = false
+}
