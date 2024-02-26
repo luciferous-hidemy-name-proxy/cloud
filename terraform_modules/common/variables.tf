@@ -20,6 +20,6 @@ variable "slack_incoming_webhooks" {
 }
 
 variable "my_api_secret" {
-  type = string
+  type     = string
   nullable = false
 }

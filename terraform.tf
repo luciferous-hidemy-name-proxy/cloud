@@ -29,6 +29,7 @@ module "common" {
   system_name            = local.system_name
   region                 = local.region
   code_hidemy_name_proxy = var.CODE_HYDEMY_NAME_PROXY
+  my_api_secret          = var.MY_API_SECRET
   slack_incoming_webhooks = [
     var.SLACK_INCOMING_WEBHOOK_1ST,
     var.SLACK_INCOMING_WEBHOOK_2ND,
@@ -57,7 +58,7 @@ variable "SLACK_INCOMING_WEBHOOK_2ND" {
 }
 
 variable "MY_API_SECRET" {
-  type = string
+  type     = string
   nullable = false
 }
 
