@@ -65,3 +65,15 @@ variable "MY_API_SECRET" {
 output "sns_topic_error_notificator" {
   value = module.common.sns_topic_error_notificator
 }
+
+output "api_root" {
+  value = module.common.api_root
+}
+
+output "api_all" {
+  value = module.common.api_all
+}
+
+output "api_random" {
+  value = module.common.api_random
+}
