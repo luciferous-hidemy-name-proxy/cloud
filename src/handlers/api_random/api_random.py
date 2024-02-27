@@ -24,8 +24,8 @@ def handler(_event, _context, client_s3: S3Client = create_client("s3")):
     return {
         "statusCode": 200,
         "headers": {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+            "content-type": "application/json",
+            "access-control-allow-origin": "*",
         },
         "body": json.dumps({"host": sample(hosts, 1)[0]}),
     }
