@@ -194,7 +194,7 @@ module "api_all" {
   handler          = "api_all.handler"
   memory_size      = 128
   timeout          = 29
-  role_arn         = aws_iam_role.api_lambda
+  role_arn         = aws_iam_role.api_lambda.arn
 
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
@@ -229,7 +229,7 @@ module "api_random" {
   handler          = "api_random.handler"
   memory_size      = 128
   timeout          = 29
-  role_arn         = aws_iam_role.api_lambda
+  role_arn         = aws_iam_role.api_lambda.arn
 
   layers = [
     data.aws_ssm_parameter.base_layer_arn.value,
