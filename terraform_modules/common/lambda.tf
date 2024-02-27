@@ -215,7 +215,8 @@ resource "aws_lambda_permission" "api_all" {
   action        = "lambda:InvokeFunction"
   function_name = module.api_all.function_name
   qualifier     = module.api_all.function_alias_name
-  principal     = "${aws_apigatewayv2_api.api.execution_arn}/*"
+  source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*"
+  principal     = "apigateway.amazonaws.com"
 }
 
 # ================================================================
@@ -250,5 +251,6 @@ resource "aws_lambda_permission" "api_random" {
   action        = "lambda:InvokeFunction"
   function_name = module.api_random.function_name
   qualifier     = module.api_random.function_alias_name
-  principal     = "${aws_apigatewayv2_api.api.execution_arn}/*"
+  source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*"
+  principal     = "apigateway.amazonaws.com"
 }
