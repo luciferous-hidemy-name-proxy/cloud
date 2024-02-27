@@ -1,3 +1,12 @@
+locals {
+  apigw = {
+    path = {
+      all    = "all.json"
+      random = "random.json"
+    }
+  }
+}
+
 resource "aws_apigatewayv2_api" "api" {
   name          = "api"
   protocol_type = "HTTP"
@@ -20,7 +29,7 @@ module "api_lambda_api_all" {
   api_id      = aws_apigatewayv2_api.api.id
   lambda_arn  = module.api_all.function_alias_arn
   http_method = "GET"
-  path        = "all.json"
+  path        = local.apigw.path.all
 }
 
 module "api_lambda_api_random" {
@@ -29,5 +38,5 @@ module "api_lambda_api_random" {
   api_id      = aws_apigatewayv2_api.api.id
   lambda_arn  = module.api_random.function_alias_arn
   http_method = "GET"
-  path        = "random.json"
+  path        = local.apigw.path.random
 }
