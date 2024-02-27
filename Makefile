@@ -18,7 +18,8 @@ fmt-terraform: \
 	fmt-terraform-root \
 	fmt-terraform-common \
 	fmt-terraform-lambda-function-basic \
-	fmt-terraform-lambda-function
+	fmt-terraform-lambda-function \
+	fmt-terraform-http-api-lambda_route
 
 fmt-terraform-root:
 	terraform fmt
@@ -33,6 +34,10 @@ fmt-terraform-lambda-function-basic:
 
 fmt-terraform-lambda-function:
 	cd terraform_modules/lambda_function && \
+	terraform fmt
+
+fmt-terraform-http-api-lambda_route:
+	cd terraform_modules/http_api_lambda_route && \
 	terraform fmt
 
 test-unit:
@@ -50,4 +55,6 @@ test-unit:
 	fmt-terraform \
 	fmt-terraform-root \
 	fmt-terraform-common \
-	fmt-terraform-lambda-function-basic
+	fmt-terraform-lambda-function-basic \
+	fmt-terraform-lambda-function \
+	fmt-terraform-http-api-lambda_route

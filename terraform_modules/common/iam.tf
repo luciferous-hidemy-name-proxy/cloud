@@ -204,7 +204,7 @@ resource "aws_iam_role" "check_proxy" {
 
 resource "aws_iam_role_policy_attachment" "check_proxy" {
   for_each = {
-    a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
     b = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
     c = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
     d = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
@@ -212,4 +212,21 @@ resource "aws_iam_role_policy_attachment" "check_proxy" {
   }
   policy_arn = each.value
   role       = aws_iam_role.check_proxy.name
+}
+
+# ================================================================
+# Role api_lambda
+# ================================================================
+
+resource "aws_iam_role" "api_lambda" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_lambda.json
+}
+
+resource "aws_iam_role_policy_attachment" "api_lambda" {
+  for_each = {
+    a = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+    b = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+  }
+  policy_arn = each.value
+  role       = aws_iam_role.api_lambda.name
 }

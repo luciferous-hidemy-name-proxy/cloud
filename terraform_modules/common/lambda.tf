@@ -182,3 +182,73 @@ resource "aws_lambda_event_source_mapping" "check_proxy_closer" {
 
   maximum_batching_window_in_seconds = aws_sqs_queue.check_proxy_closer.visibility_timeout_seconds
 }
+
+# ================================================================
+# Lambda api_all
+# ================================================================
+
+module "api_all" {
+  source = "../lambda_function"
+
+  handler_dir_name = "api_all"
+  handler          = "api_all.handler"
+  memory_size      = 128
+  timeout          = 29
+  role_arn         = aws_iam_role.api_lambda
+
+  layers = [
+    data.aws_ssm_parameter.base_layer_arn.value,
+    aws_lambda_layer_version.common.arn,
+  ]
+
+  environment_variables = {
+    S3_BUCKET = aws_s3_bucket.data.bucket
+    S3_KEY    = local.s3.data_key
+  }
+
+  system_name                         = var.system_name
+  region                              = var.region
+  subscription_destination_lambda_arn = module.error_notificator.function_arn
+}
+
+resource "aws_lambda_permission" "api_all" {
+  action        = "lambda:InvokeFunction"
+  function_name = module.api_all.function_name
+  qualifier     = module.api_all.function_alias_name
+  principal     = "${aws_apigatewayv2_api.api.execution_arn}/*"
+}
+
+# ================================================================
+# Lambda api_random
+# ================================================================
+
+module "api_random" {
+  source = "../lambda_function"
+
+  handler_dir_name = "api_random"
+  handler          = "api_random.handler"
+  memory_size      = 128
+  timeout          = 29
+  role_arn         = aws_iam_role.api_lambda
+
+  layers = [
+    data.aws_ssm_parameter.base_layer_arn.value,
+    aws_lambda_layer_version.common.arn,
+  ]
+
+  environment_variables = {
+    S3_BUCKET = aws_s3_bucket.data.bucket
+    S3_KEY    = local.s3.data_key
+  }
+
+  system_name                         = var.system_name
+  region                              = var.region
+  subscription_destination_lambda_arn = module.error_notificator.function_arn
+}
+
+resource "aws_lambda_permission" "api_random" {
+  action        = "lambda:InvokeFunction"
+  function_name = module.api_random.function_name
+  qualifier     = module.api_random.function_alias_name
+  principal     = "${aws_apigatewayv2_api.api.execution_arn}/*"
+}
